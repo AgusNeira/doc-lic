@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="doc-lic.jnlp">
+  <information>
+    <title>doc-lic</title>
+    <vendor>Agustín</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="doc-lic.jar" size="67368" download="eager" />
+    <jar href="lib\sqlite-jdbc-3.23.1.jar" size="6733696" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="800" height="600" main-class="doclic.DocLic"  name="doc-lic" />
+  <update check="always"/>
+</jnlp>

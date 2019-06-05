@@ -16,8 +16,8 @@ import java.time.LocalDate;
 public class Suplencia extends SERUDData {
     
     @Override public final SERUDData copy(){
-        return new Suplencia(id, docente, materia, date0, date1, date2,
-                reason, observaciones);
+        return new Suplencia(id.get(), docente, materia, date0.get(), date1.get(),
+                date2.get(), reason.get(), observaciones.get());
     }
     
     public Suplencia(ResultSet rs) throws SQLException {

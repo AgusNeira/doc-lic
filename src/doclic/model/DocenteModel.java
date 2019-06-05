@@ -2,7 +2,6 @@ package doclic.model;
 
 import doclic.data.Docente;
 import doclic.database.ConnectionPool;
-import doclic.database.ConnectionPool;
 import java.sql.Connection;
 
 import java.sql.PreparedStatement;
@@ -21,6 +20,9 @@ public class DocenteModel extends CRUDModel<Docente> {
     private static DocenteModel INSTANCE = null;
     
     private static TableColumn<Docente, String>[] getColumns(){
+        TableColumn<Docente, Integer> id = new TableColumn<>("Código");
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        
         TableColumn<Docente, String> name = new TableColumn<>("Nombre y Apellido");
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         
@@ -28,7 +30,7 @@ public class DocenteModel extends CRUDModel<Docente> {
         cuit.setCellValueFactory(new PropertyValueFactory<>("cuit"));
         
         return (TableColumn<Docente, String>[]) Arrays
-                .asList(name, cuit)
+                .asList(id, name, cuit)
                 .toArray();
     }
     public static void init(){
@@ -63,9 +65,8 @@ public class DocenteModel extends CRUDModel<Docente> {
                
             this.DEFAULT_VALUE = this.data
                     .stream()
-                    .filter(doc -> doc.getCUIT() == 0)
                     .findFirst()
-                    .orElse(null);
+                    .get();
             
             rs.close();
             stmt.close();
@@ -88,7 +89,7 @@ public class DocenteModel extends CRUDModel<Docente> {
             PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setString(1, doc.nameProperty().get());
-            ps.setLong(2, doc.getCUIT());
+            ps.setString(2, doc.cuitProperty().get());
          
             ps.executeUpdate();
             
@@ -102,15 +103,15 @@ public class DocenteModel extends CRUDModel<Docente> {
     }
     @Override protected final void update(Docente from, Docente to){
         
-            String query = "UPDATE docentes SET fullname = ?, cuit = ? WHERE cuit = ?";
+            String query = "UPDATE docentes SET fullname = ?, cuit = ? WHERE id = ?";
             
         try {
             Connection conn = ConnectionPool.get().getConnection();
             PreparedStatement ps = conn.prepareStatement(query);
            
             ps.setString(1, to.nameProperty().get());
-            ps.setLong(2, to.getCUIT());
-            ps.setLong(3, from.getCUIT());
+            ps.setString(2, to.cuitProperty().get());
+            ps.setInt(3, from.idProperty().get());
          
             ps.executeUpdate();
             
@@ -130,7 +131,7 @@ public class DocenteModel extends CRUDModel<Docente> {
             Connection conn = ConnectionPool.get().getConnection();
             PreparedStatement ps = conn.prepareStatement("DELETE FROM Docentes WHERE id = ?;");
               
-            ps.setLong(1, doc.getCUIT());
+            ps.setInt(1, doc.idProperty().get());
                         
             ps.executeUpdate();
             

@@ -16,8 +16,8 @@ import java.time.LocalDate;
 public class Titularity extends SERUDData {
     
     @Override public final SERUDData copy(){
-        return new Titularity(id, docente, materia, date0,
-                date1, date2, reason, observaciones);
+        return new Titularity(id.get(), docente, materia, date0.get(),
+                date1.get(), date2.get(), reason.get(), observaciones.get());
     }
     
     public Titularity(ResultSet rs) throws SQLException {

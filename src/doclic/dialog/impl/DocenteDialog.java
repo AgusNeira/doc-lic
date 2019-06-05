@@ -37,8 +37,9 @@ public class DocenteDialog extends CRUDDialog<Docente> {
         resultConverter = (buttonType) -> {
             if(buttonType == ButtonType.APPLY)
                 return new Docente(
+                        -1,
                         nameEntry.getValue(),
-                        Docente.parseCuit(cuitEntry.getValue())
+                        cuitEntry.getValue()
                 );
             return null;
         };
@@ -57,8 +58,9 @@ public class DocenteDialog extends CRUDDialog<Docente> {
         resultConverter = (buttonType) -> {
             if(buttonType == ButtonType.APPLY)
                 return new Docente(
+                        doc.idProperty().get(),
                         nameEntry.getValue(),
-                        Docente.parseCuit(cuitEntry.getValue())
+                        cuitEntry.getValue()
                 );
             return null;
         };

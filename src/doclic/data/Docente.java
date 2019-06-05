@@ -1,4 +1,4 @@
- 
+
 package doclic.data;
 
 
@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  *
@@ -13,25 +14,31 @@ import java.sql.SQLException;
  */
 public class Docente extends CRUDData {
     
-    public static long parseCuit(String cuit){
-        return Long.parseLong(cuit.replace("-", ""));
-    }
-    
     @Override public Docente copy(){
-        return new Docente(this.name.get(), this.cuit);
+        return new Docente(this.id.get(), this.name.get(), this.cuit.get());
     }
     
+    private final SimpleIntegerProperty id;
     private final SimpleStringProperty name;
-    private final long cuit;
+    private final SimpleStringProperty cuit;
     
-    public Docente(String name, long cuit){
+    public Docente(int id, String name, String cuit){
+        this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
-        this.cuit = cuit;
+        this.cuit = new SimpleStringProperty(cuit);
     }
     
     public Docente(ResultSet rs) throws SQLException {
+        this.id = new SimpleIntegerProperty(rs.getInt("id"));
         this.name = new SimpleStringProperty(rs.getString("fullname"));
-        this.cuit = rs.getLong("cuit");
+        this.cuit = new SimpleStringProperty(rs.getString("cuit"));
+    }
+    
+    public SimpleIntegerProperty idProperty(){
+        return this.id;
+    }
+    public int getId(){
+        return this.id.get();
     }
     
     public SimpleStringProperty nameProperty(){
@@ -39,14 +46,6 @@ public class Docente extends CRUDData {
     }
     
     public SimpleStringProperty cuitProperty(){
-        String str = String.valueOf(this.cuit);
-        if(str.length() == 11){
-            return new SimpleStringProperty(str.substring(0, 2) + "-" + str.substring(2, 10) + "-" + str.substring(10));
-        }
-        return new SimpleStringProperty("NULL");
-    }
-    
-    public long getCUIT(){
         return this.cuit;
     }
     

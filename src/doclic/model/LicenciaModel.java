@@ -8,7 +8,6 @@ package doclic.model;
 import doclic.data.Licencia;
 import doclic.data.SERUDData;
 import doclic.database.ConnectionPool;
-import doclic.database.ConnectionPool;
 import doclic.dialog.SERUDDialog;
 import java.sql.Connection;
 import java.sql.Date;
@@ -77,7 +76,7 @@ public class LicenciaModel extends SERUDModel<Licencia> {
             Connection conn = ConnectionPool.get().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlQuery);
                
-            stmt.setLong(1, obj.getDocente().getCUIT());
+            stmt.setLong(1, obj.getDocente().getId());
             stmt.setInt(2, obj.getMateria().getId());
             stmt.setDate(3, Date.valueOf(obj.getDate0()));
             stmt.setDate(4, Date.valueOf(obj.getDate1()));

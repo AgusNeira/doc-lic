@@ -75,7 +75,7 @@ public class SuplenciaModel extends SERUDModel<Suplencia> {
             Connection conn = ConnectionPool.get().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlQuery);
                 
-            stmt.setLong(1, obj.getDocente().getCUIT());
+            stmt.setLong(1, obj.getDocente().getId());
             stmt.setInt(2, obj.getMateria().getId());
             stmt.setDate(3, Date.valueOf(obj.getDate0()));
             stmt.setDate(4, Date.valueOf(obj.getDate1()));

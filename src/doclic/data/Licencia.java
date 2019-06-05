@@ -17,8 +17,8 @@ import java.time.LocalDate;
 public class Licencia extends SERUDData {
     
     @Override public final SERUDData copy(){
-        return new Licencia(id, docente, materia, date0,
-                date1, date2, reason, observaciones);
+        return new Licencia(id.get(), docente, materia, date0.get(),
+                date1.get(), date2.get(), reason.get(), observaciones.get());
     }
     
     public Licencia(ResultSet rs) throws SQLException {

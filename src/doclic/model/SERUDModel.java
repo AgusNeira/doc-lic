@@ -3,6 +3,7 @@ package doclic.model;
 import doclic.data.SERUDData;
 import doclic.model.filter.CheckBoxFilter;
 import doclic.model.filter.Filter;
+import java.time.LocalDate;
 import java.util.Arrays;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -20,19 +21,22 @@ public abstract class SERUDModel<T extends SERUDData>
         extends ReadOnlyModel<SERUDData> {
     
     public static TableColumn<SERUDData, String>[] getColumns(){
+        TableColumn<SERUDData, Integer> id = new TableColumn<>("Código");
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        
         TableColumn<SERUDData, String> doc = new TableColumn<>("Docente");
         doc.setCellValueFactory(new PropertyValueFactory<>("docente"));
         
         TableColumn<SERUDData, String> mat = new TableColumn<>("Materia");
         mat.setCellValueFactory(new PropertyValueFactory<>("materia"));
         
-        TableColumn<SERUDData, String> date0 = new TableColumn<>("Fecha de inicio");
+        TableColumn<SERUDData, LocalDate> date0 = new TableColumn<>("Fecha de inicio");
         date0.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         
-        TableColumn<SERUDData, String> date1 = new TableColumn<>("Fecha estimada de fin");
+        TableColumn<SERUDData, LocalDate> date1 = new TableColumn<>("Fecha estimada de fin");
         date1.setCellValueFactory(new PropertyValueFactory<>("temptativeEndDate"));
         
-        TableColumn<SERUDData, String> date2 = new TableColumn<>("Fecha de fin");
+        TableColumn<SERUDData, LocalDate> date2 = new TableColumn<>("Fecha de fin");
         date2.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         
         TableColumn<SERUDData, String> period = new TableColumn<>("Duración");
@@ -45,7 +49,7 @@ public abstract class SERUDModel<T extends SERUDData>
         obs.setCellValueFactory(new PropertyValueFactory<>("observaciones"));
         
         return (TableColumn<SERUDData, String>[]) Arrays
-                .asList(doc, mat, date0, date1, date2, period, reason, obs)
+                .asList(id, doc, mat, date0, date1, date2, period, reason, obs)
                 .toArray();
         
     }

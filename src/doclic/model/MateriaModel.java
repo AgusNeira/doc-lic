@@ -23,11 +23,11 @@ public class MateriaModel extends CRUDModel<Materia> {
     
     private static TableColumn<Materia, String>[] getColumns(){
         
-        TableColumn<Materia, String> id = new TableColumn<>("Código");
+        TableColumn<Materia, Integer> id = new TableColumn<>("Código");
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         
         TableColumn<Materia, String> name = new TableColumn<>("Nombre");
-        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        name.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         
         TableColumn<Materia, String> titular = new TableColumn<>("Titular");
         titular.setCellValueFactory(new PropertyValueFactory<>("titular"));
@@ -35,7 +35,7 @@ public class MateriaModel extends CRUDModel<Materia> {
         TableColumn<Materia, String> suplente = new TableColumn<>("Suplente");
         suplente.setCellValueFactory(new PropertyValueFactory<>("suplente"));
         
-        TableColumn<Materia, String> carga = new TableColumn<>("Carga Semanal");
+        TableColumn<Materia, Integer> carga = new TableColumn<>("Carga Semanal");
         carga.setCellValueFactory(new PropertyValueFactory<>("load"));
         
         TableColumn<Materia, String> licensed = new TableColumn<>("Licencia");
@@ -183,7 +183,7 @@ public class MateriaModel extends CRUDModel<Materia> {
             PreparedStatement ps = conn.prepareStatement(sqlQuery);
                 
             if(!(tit.isEnded() || deleting)){
-                ps.setLong(1, tit.getDocente().getCUIT());
+                ps.setLong(1, tit.getDocente().getId());
             } else {
                 ps.setLong(1, 0);
             }
@@ -203,7 +203,7 @@ public class MateriaModel extends CRUDModel<Materia> {
             PreparedStatement ps = conn.prepareStatement(sqlQuery);
               
             if(!(sup.isEnded() || deleting)){
-                ps.setLong(1, sup.getDocente().getCUIT());
+                ps.setLong(1, sup.getDocente().getId());
             } else {
                 ps.setLong(1, 0);
             }

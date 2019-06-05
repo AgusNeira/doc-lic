@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javafx.beans.property.SimpleIntegerProperty;
 
 
 /**
@@ -15,103 +16,118 @@ import java.sql.SQLException;
 public class Materia extends CRUDData {
     
     @Override public Materia copy(){
-        return new Materia(id, name, year, div, titular,
-                suplente, load, licensed);
+        return new Materia(id.get(), name.get(), year.get(), div.get(), titular,
+                suplente, load.get(), licensed);
     }
     
-    private final Integer id;
-    private final String name;
-    private final int year;
-    private final int div;
+    private final SimpleIntegerProperty id;
+    private final SimpleStringProperty name;
+    private final SimpleIntegerProperty year;
+    private final SimpleIntegerProperty div;
+    private final SimpleStringProperty fullName;
     private final Docente titular;
     private final Docente suplente;
-    private final Integer load;
+    private final SimpleIntegerProperty load;
     private final boolean licensed;
     
     private Materia(int id, String name, int year, int div,
             Docente tit, Docente sup, int load, boolean licensed){
-        this.id = id;
-        this.name = name;
-        this.year = year;
-        this.div = div;
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.year = new SimpleIntegerProperty(year);
+        this.div = new SimpleIntegerProperty(div);
         this.titular = tit.copy();
         this.suplente = sup.copy();
-        this.load = load;
+        this.load = new SimpleIntegerProperty(load);
         this.licensed = licensed;
+        
+        this.fullName = new SimpleStringProperty(this.name + " " + this.year + "° " + this.div + "°");
     }
     
     public Materia(int id,
             String name, String year, String div,
             String carga){
-        this.id =    id;
-        this.name =         name;
-        this.year =         Integer.parseInt(year);
-        this.div =          Integer.parseInt(div);
+        this.id =           new SimpleIntegerProperty(id);
+        this.name =         new SimpleStringProperty(name);
+        this.year =         new SimpleIntegerProperty(Integer.parseInt(year));
+        this.div =          new SimpleIntegerProperty(Integer.parseInt(div));
         this.titular =      DocenteModel.getDefaultValue().copy();
         this.suplente =     DocenteModel.getDefaultValue().copy();
-        this.load =         Integer.parseInt(carga);
+        this.load =         new SimpleIntegerProperty(Integer.parseInt(carga));
         this.licensed =     false;
+        
+        this.fullName = new SimpleStringProperty(this.name + " " + this.year + "° " + this.div + "°");
     }
     
     public Materia(ResultSet rs) throws SQLException {
-        this.id  = rs.getInt("id");
-        this.name       = rs.getString("name");
-        this.year       = rs.getInt("year");
-        this.div        = rs.getInt("division");
-        long sqlTit   = rs.getLong("titular");
+        this.id         = new SimpleIntegerProperty(rs.getInt("id"));
+        this.name       = new SimpleStringProperty(rs.getString("name"));
+        this.year       = new SimpleIntegerProperty(rs.getInt("year"));
+        this.div        = new SimpleIntegerProperty(rs.getInt("division"));
+        int sqlTit     = rs.getInt("titular");
         this.titular    = DocenteModel.get()
-                .find(doc -> doc.getCUIT() == sqlTit)
+                .find(doc -> doc.getId() == sqlTit)
                 .orElse(DocenteModel.getDefaultValue())
                 .copy();
-        long sqlSup   = rs.getLong("suplente");
+        int sqlSup   = rs.getInt("suplente");
         this.suplente    = DocenteModel.get()
-                .find(doc -> doc.getCUIT() == sqlSup)
+                .find(doc -> doc.getId() == sqlSup)
                 .orElse(DocenteModel.getDefaultValue())
                 .copy();
-        this.load      = rs.getInt("hourlyload");
+        this.load      = new SimpleIntegerProperty(rs.getInt("hourlyload"));
         this.licensed = rs.getBoolean("licenseactive");
+        
+        this.fullName = new SimpleStringProperty(this.name + " " + this.year + "° " + this.div + "°");
     }
     
     public int getId(){
-        return this.id;
+        return this.id.get();
     }
-    public String getName(){
-        return this.name;
-    }
-    public int getYear(){
-        return this.year;
-    }
-    public int getDivision(){
-        return this.div;
-    }
-    public Docente getTitular(){
-        return this.titular;
-    }
-    public Docente getSuplente(){
-        return this.suplente;
-    }
-    public int getLoad(){
-        return this.load;
-    }
-    public boolean getLicensed(){
-        return this.licensed;
-    }
-    
     public SimpleStringProperty idProperty(){
         return new SimpleStringProperty(String.valueOf(this.id));
     }
     
+    public String getName(){
+        return this.name.get();
+    }
     public SimpleStringProperty nameProperty(){
-        return new SimpleStringProperty(this.toString());
+        return this.name;
+    }
+    
+    public int getYear(){
+        return this.year.get();
+    }
+    public int getDivision(){
+        return this.div.get();
+    }
+    
+    public SimpleStringProperty fullNameProperty(){
+        return this.fullName;
+    }
+    
+    public Docente getTitular(){
+        return this.titular;
     }
     public SimpleStringProperty titularProperty(){
         return this.titular.nameProperty();
     }
+    
+    public Docente getSuplente(){
+        return this.suplente;
+    }
     public SimpleStringProperty suplenteProperty(){
         return this.suplente.nameProperty();
     }
+    
+    public int getLoad(){
+        return this.load.get();
+    }
     public SimpleStringProperty loadProperty(){
         return new SimpleStringProperty(String.valueOf(this.load) + " horas");
+    }
+    
+    public boolean getLicensed(){
+        return this.licensed;
     }
     public SimpleStringProperty licensedProperty(){
         if(licensed) return new SimpleStringProperty("Activa");
